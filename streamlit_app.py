@@ -150,8 +150,18 @@ dec_file = st.file_uploader("December source data (.xlsx)", type=["xlsx"])
 if recon_file and dec_file:
     if st.button("Generate December Reconciliation"):
         try:
-            recon_df = pd.read_excel(recon_file, sheet_name=RECON_SHEET_NAME, header=None)
-            dec_df   = pd.read_excel(dec_file,   sheet_name=DEC_SHEET_NAME)
+            # Use openpyxl explicitly for reading
+            recon_df = pd.read_excel(
+                recon_file,
+                sheet_name=RECON_SHEET_NAME,
+                header=None,
+                engine="openpyxl",
+            )
+            dec_df = pd.read_excel(
+                dec_file,
+                sheet_name=DEC_SHEET_NAME,
+                engine="openpyxl",
+            )
 
             updated_df = update_recon_with_dec(recon_df, dec_df)
 
@@ -174,7 +184,14 @@ if recon_file and dec_file:
                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             )
 
+        except ImportError as e:
+            st.error(
+                "The 'openpyxl' package is not installed in this environment. "
+                "Please add 'openpyxl' to requirements.txt and redeploy."
+            )
         except Exception as e:
             st.error(f"Error while generating reconciliation: {e}")
 else:
     st.info("Upload both the recon file and the December source data to proceed.")
+
+    
