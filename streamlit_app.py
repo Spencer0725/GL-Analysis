@@ -10,17 +10,17 @@ RECON_SHEET_NAME = "113520000"
 DEC_SHEET_NAME   = "11352000_Dec"
 AMOUNT_COL_NAME  = "        Amount in LC"   # must match Dec file exactly
 
-# Row indices for key recon lines (0-based)
+# Row indices for key recon lines (0-based) – UPDATED FOR NEW TEMPLATE
 ROW_ACCRUAL_PRICING = 9       # "Accrual via Pricing Condition"
 ROW_RECLASS_PPV     = 10      # "Accrual reclass from PPV (Hi-P/Trisa)"
 ROW_RECLASS_WEB     = 11      # "Accrual Reclass (WEB)"
 ROW_OTHERS_TRUEUP   = 12      # "Others (true up)"
-ROW_INV_RAVISA      = 16      # "Invoices - Ravisa"
-ROW_ENDING_BAL      = 27      # "Ending Balance"
-ROW_GL_BAL_SAP      = 29      # "GL Balance in SAP"
-ROW_CHECK           = 30      # "check --> must be zero"
+ROW_INV_RAVISA      = 14      # "Invoices - Ravisa"
+ROW_ENDING_BAL      = 15      # "Ending Balance"
+ROW_GL_BAL_SAP      = 17      # "GL Balance in SAP"
+ROW_CHECK           = 18      # "check--> must be zero"
 
-# Column indices (0-based)
+# Column indices (0-based) – these match your new file
 COL_YTD = 6        # YTD column
 COL_NOV = 17       # November column
 COL_DEC = 18       # December column
@@ -150,7 +150,6 @@ dec_file = st.file_uploader("December source data (.xlsx)", type=["xlsx"])
 if recon_file and dec_file:
     if st.button("Generate December Reconciliation"):
         try:
-            # Let pandas choose the engine; it will use openpyxl for .xlsx
             recon_df = pd.read_excel(
                 recon_file,
                 sheet_name=RECON_SHEET_NAME,
@@ -186,5 +185,3 @@ if recon_file and dec_file:
             st.error(f"Error while generating reconciliation: {e}")
 else:
     st.info("Upload both the recon file and the December source data to proceed.")
-
-    
